@@ -99,8 +99,20 @@ namespace ParkyAPI.Controllers
                 return StatusCode(500, ModelState);
             }
 
-
             return NoContent();
+
+        }
+
+        [HttpDelete ("{nationalParkId}")]
+        public IActionResult DeleteNationalPark(int nationalParkId)
+        {
+            var obj = _npRepo.GetNationalPark(nationalParkId);
+            if (obj==null)
+            {
+                return NotFound(ModelState);
+            }
+            _npRepo.DeleteNationalPark(obj);
+            return Ok();
 
 
         }
