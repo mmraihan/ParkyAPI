@@ -42,13 +42,13 @@ namespace ParkyAPI.Repository
             return listOfDataFromDb;
         }
 
-        public bool NationalParkExist(string name)
+        public bool NationalParkExists(string name)
         {
             bool value = _db.NationalParks.Any(a => a.Name.ToLower().Trim() == name.ToLower().Trim());
             return value;
         }
 
-        public bool NationalParkExist(int id)
+        public bool NationalParkExists(int id)
         {
             bool value = _db.NationalParks.Any(a => a.Id == id);
             return value;
