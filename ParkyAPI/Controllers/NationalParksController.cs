@@ -65,7 +65,19 @@ namespace ParkyAPI.Controllers
                 return NotFound();
             }
 
-            var objDto = _mapper.Map<NationalParkDto>(obj);
+             var objDto = _mapper.Map<NationalParkDto>(obj); //to=nationalParkDto, from = obj
+
+            #region Without Auto Mapper
+            //var objDto = new NationalParkDto()
+            //{
+            //    Name = obj.Name,
+            //    Id = obj.Id,
+            //    Created = obj.Created,
+            //    State = obj.State
+            //};
+            #endregion
+
+
             return Ok(objDto);
 
         }
