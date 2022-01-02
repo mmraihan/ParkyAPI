@@ -36,6 +36,7 @@ namespace ParkyAPI
             services.AddDbContext<ApplicationDbContext>
                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
+            services.AddScoped<ITrailRepository, TrailRepository>();
             services.AddAutoMapper(typeof(ParkyMapings));
             services.AddSwaggerGen(options =>
             {
@@ -44,7 +45,7 @@ namespace ParkyAPI
                     {
                         Title = "Parky API",
                         Version = "1",
-                        Description= "Parky API by Udemy",
+                        Description= "Parky API Project",
                         Contact= new Microsoft.OpenApi.Models.OpenApiContact()
                         {
                             Email = "mm_raihan@live.com",
