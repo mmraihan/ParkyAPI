@@ -43,7 +43,14 @@ namespace ParkyAPI
                     new Microsoft.OpenApi.Models.OpenApiInfo()
                     {
                         Title = "Parky API",
-                        Version = "1"
+                        Version = "1",
+                        Description= "Parky API by Udemy",
+                        Contact= new Microsoft.OpenApi.Models.OpenApiContact()
+                        {
+                            Email = "mm_raihan@live.com",
+                            Name="Md. Mubasshir Raihan",
+                            Url= new Uri("https://mmraihan.github.io/raihan/")
+                        }
 
                     });
                 //------Summary API (XML Comments Read)---
