@@ -1,4 +1,5 @@
-﻿using ParkyAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ParkyAPI.Data;
 using ParkyAPI.Models;
 using ParkyAPI.Repository.IRepository;
 using System;
@@ -32,19 +33,19 @@ namespace ParkyAPI.Repository
 
         public Trail GetTrail(int trailId)
         {
-            var data= _db.Trails.FirstOrDefault(c => c.Id == trailId);
+            var data= _db.Trails.Include(c => c.NationalPark).FirstOrDefault(c => c.Id == trailId);
             return data;
         }
 
         public ICollection<Trail> GetTrails()
         {
-            var listOfDataFromDb = _db.Trails.OrderBy(c => c.Name).ToList();
+            var listOfDataFromDb = _db.Trails.Include(c => c.NationalPark).OrderBy(c => c.Name).ToList();
             return listOfDataFromDb;
         }
 
         public bool TrailExists(string name)
         {
-            bool value = _db.Trails.Any(a => a.Name.ToLower().Trim() == name.ToLower().Trim());
+            bool value = _db.Trails.Include(c => c.NationalPark).Any(a => a.Name.ToLower().Trim() == name.ToLower().Trim());
             return value;
         }
 
@@ -63,6 +64,11 @@ namespace ParkyAPI.Repository
         {
             _db.Trails.Update(trail);
             return Save();
+        }
+
+        public ICollection<Trail> GetTrailsInNationalPark(int npId)
+        {
+            return _db.Trails.Include(c => c.NationalPark).Where(c => c.NationalParkId == npId).ToList();
         }
     }
 }
