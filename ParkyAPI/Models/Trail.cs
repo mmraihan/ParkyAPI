@@ -19,8 +19,8 @@ namespace ParkyAPI.Models
         public double Distance { get; set; }
 
         public enum DifficultyType { Easy, Moderate, Difficult, Expert }
-
         public DifficultyType Difficulty { get; set; }
+
         [Required]
         public int NationalParkId { get; set; }
 

@@ -8,7 +8,7 @@ using static ParkyAPI.Models.Trail;
 
 namespace ParkyAPI.Models.Dtos
 {
-    public class TrailDto
+    public class TrailUpdateDto
     {
         public int Id { get; set; }
 
@@ -16,14 +16,11 @@ namespace ParkyAPI.Models.Dtos
         public string Name { get; set; }
 
         [Required]
-        public double Distance { get; set; }    
+        public double Distance { get; set; }
         public DifficultyType Difficulty { get; set; }
 
         [Required]
         public int NationalParkId { get; set; }
-   
-        public NationalParkDto NationalPark { get; set; } 
 
-      
     }
 }
