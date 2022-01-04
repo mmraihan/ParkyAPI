@@ -18,6 +18,10 @@ using AutoMapper;
 using ParkyAPI.ParkyMapper;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ParkyAPI
 {
@@ -45,49 +49,57 @@ namespace ParkyAPI
                 options.ReportApiVersions = true;
 
             });
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("ParkyOpenAPISpec",
-                    new Microsoft.OpenApi.Models.OpenApiInfo()
-                    {
-                        Title = "Parky API",
-                        Version = "1",
-                        Description= "Parky API",
-                        Contact= new Microsoft.OpenApi.Models.OpenApiContact()
-                        {
-                            Email = "mm_raihan@live.com",
-                            Name="Md. Mubasshir Raihan",
-                            Url= new Uri("https://mmraihan.github.io/raihan/")
-                        }
 
-                    });
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
 
-                //options.SwaggerDoc("ParkyOpenAPISpecTrails", //Seperate API
-                //    new Microsoft.OpenApi.Models.OpenApiInfo()
-                //    {
-                //        Title = "Parky API- Trails",
-                //        Version = "1",
-                //        Description = "Parky API Project-Trails",
-                //        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
-                //        {
-                //            Email = "mm_raihan@live.com",
-                //            Name = "Md. Mubasshir Raihan",
-                //            Url = new Uri("https://mmraihan.github.io/raihan/")
-                //        }
+            #region API Versioning Desctiption
+            //services.AddSwaggerGen(options =>
+            //{
+            //    options.SwaggerDoc("ParkyOpenAPISpec",
+            //        new Microsoft.OpenApi.Models.OpenApiInfo()
+            //        {
+            //            Title = "Parky API",
+            //            Version = "1",
+            //            Description= "Parky API",
+            //            Contact= new Microsoft.OpenApi.Models.OpenApiContact()
+            //            {
+            //                Email = "mm_raihan@live.com",
+            //                Name="Md. Mubasshir Raihan",
+            //                Url= new Uri("https://mmraihan.github.io/raihan/")
+            //            }
 
-                //    });
+            //        });
+
+            //options.SwaggerDoc("ParkyOpenAPISpecTrails", //Seperate API
+            //    new Microsoft.OpenApi.Models.OpenApiInfo()
+            //    {
+            //        Title = "Parky API- Trails",
+            //        Version = "1",
+            //        Description = "Parky API Project-Trails",
+            //        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+            //        {
+            //            Email = "mm_raihan@live.com",
+            //            Name = "Md. Mubasshir Raihan",
+            //            Url = new Uri("https://mmraihan.github.io/raihan/")
+            //        }
+
+            //    });
 
 
-                //------Summary API (XML Comments Read)---
-                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
-                options.IncludeXmlComments(cmlCommentsFullPath);
-            });
+            //    //------Summary API (XML Comments Read)---
+            //    var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+            //    options.IncludeXmlComments(cmlCommentsFullPath);
+            //});
+            #endregion
+
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
