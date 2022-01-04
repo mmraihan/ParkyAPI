@@ -38,14 +38,21 @@ namespace ParkyAPI
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddScoped<ITrailRepository, TrailRepository>();
             services.AddAutoMapper(typeof(ParkyMapings));
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+
+            });
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("ParkyOpenAPISpecNP",
+                options.SwaggerDoc("ParkyOpenAPISpec",
                     new Microsoft.OpenApi.Models.OpenApiInfo()
                     {
-                        Title = "Parky API- National park",
+                        Title = "Parky API",
                         Version = "1",
-                        Description= "Parky API Project-NP",
+                        Description= "Parky API",
                         Contact= new Microsoft.OpenApi.Models.OpenApiContact()
                         {
                             Email = "mm_raihan@live.com",
@@ -55,20 +62,20 @@ namespace ParkyAPI
 
                     });
 
-                options.SwaggerDoc("ParkyOpenAPISpecTrails",
-                    new Microsoft.OpenApi.Models.OpenApiInfo()
-                    {
-                        Title = "Parky API- Trails",
-                        Version = "1",
-                        Description = "Parky API Project-Trails",
-                        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
-                        {
-                            Email = "mm_raihan@live.com",
-                            Name = "Md. Mubasshir Raihan",
-                            Url = new Uri("https://mmraihan.github.io/raihan/")
-                        }
+                //options.SwaggerDoc("ParkyOpenAPISpecTrails", //Seperate API
+                //    new Microsoft.OpenApi.Models.OpenApiInfo()
+                //    {
+                //        Title = "Parky API- Trails",
+                //        Version = "1",
+                //        Description = "Parky API Project-Trails",
+                //        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                //        {
+                //            Email = "mm_raihan@live.com",
+                //            Name = "Md. Mubasshir Raihan",
+                //            Url = new Uri("https://mmraihan.github.io/raihan/")
+                //        }
 
-                    });
+                //    });
 
 
                 //------Summary API (XML Comments Read)---
@@ -91,8 +98,8 @@ namespace ParkyAPI
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpecNP/swagger.json", "Parky API NP");
-                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpecTrails/swagger.json", "Parky API Trails");
+                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "Parky API");
+               // options.SwaggerEndpoint("/swagger/ParkyOpenAPISpecTrails/swagger.json", "Parky API Trails");
                 options.RoutePrefix = "";
             });
 
