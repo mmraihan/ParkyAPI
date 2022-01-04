@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace ParkyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/nationalParks")]
+    [ApiVersion("2.0")]
+    //[Route("api/[controller]")]
     [ApiController]
     //[ApiExplorerSettings(GroupName = "ParkyOpenAPISpecNP")] //Separate Documentation
     [ProducesResponseType(StatusCodes.Status400BadRequest)] //It's very generic for all 
@@ -35,17 +37,10 @@ namespace ParkyAPI.Controllers
 
         public IActionResult GetNationalParks()
         {
-            var objListFromDb = _npRepo.GetNationalParks();
-
-            //Should not expose Domain Models to ouside, Should expose the DTO Models
-
-            var objDto = new List<NationalParkDto>();
-
-            foreach (var obj in objListFromDb)
-            {
-               objDto.Add(_mapper.Map<NationalParkDto>(obj)); //to=NatioNalParkDto, from = obj                           
-            }
-            return Ok(objDto);
+            var objListFromDb = _npRepo.GetNationalParks().FirstOrDefault();
+            return Ok(_mapper.Map<NationalParkDto>(objListFromDb));
+          
+            
         }
 
        
