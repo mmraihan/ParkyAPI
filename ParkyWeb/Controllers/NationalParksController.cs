@@ -32,7 +32,7 @@ namespace ParkyWeb.Controllers
             NationalPark obj = new NationalPark();
             if (id==null)
             {              
-                return View(obj); // --Tre for Insert
+                return View(obj); // --True for Insert
             }
                
             obj = await _np.GetAsync(SD.NationalParkApiPath, id.GetValueOrDefault()); //--Flow will come for Update
