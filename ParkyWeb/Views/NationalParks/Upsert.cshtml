@@ -45,6 +45,7 @@
                 </div>
                 <div class="col-8">
                     <input type="file" asp-for="Picture" id="projectImage" multiple class="form-control" />
+                    
 
                 </div>
             </div>
@@ -85,7 +86,10 @@
                 var base64 = Convert.ToBase64String(Model.Picture);
                 var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
                 <img src="@imgsrc" width="100%" />
+
+               
             }
+
 
         </div>
     </div>

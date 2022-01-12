@@ -50,9 +50,9 @@ namespace ParkyWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var files = HttpContext.Request.Form.Files;
+                var files = HttpContext.Request.Form.Files; //Get the file that was uploaded
                 if (files.Count>0)
-                {
+                { //Convert that image to a string
                     byte[] p1 = null;
                     using (var fs1 = files[0].OpenReadStream())
                     {
@@ -64,11 +64,12 @@ namespace ParkyWeb.Controllers
                     }
                     obj.Picture = p1;
                 }
-                else
+                else //If image is not uploaded
                 {
                     var objFromDb = await _np.GetAsync(SD.NationalParkApiPath, obj.Id);
                     obj.Picture = objFromDb.Picture;
                 }
+
                 if (obj.Id==0)
                 {
                     await _np.CreateAsync(SD.NationalParkApiPath, obj);
@@ -80,8 +81,12 @@ namespace ParkyWeb.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+            else
+            {
+                return View(obj);
+            }
 
-            return View(obj);
+           
         }
             
 
