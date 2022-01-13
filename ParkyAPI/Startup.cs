@@ -55,6 +55,9 @@ namespace ParkyAPI
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen();
 
+            var appSettings = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettings);
+
             #region API Versioning Desctiption
             //services.AddSwaggerGen(options =>
             //{
