@@ -1,6 +1,6 @@
 ﻿@model ParkyWeb.Models.ViewModel.TrailsVM
 @{
-    var title = "Create Upser";
+    var title = "Create Trail";
 }
 
 <form method="post" asp-action="Upsert">
@@ -10,7 +10,7 @@
         @if (Model.Trail.Id != 0)
         {
             <input type="hidden" asp-for="Trail.Id" />
-            title = "Edit Upsert";
+            title = "Edit Trail";
         }
         <div class="col-12 p-3">
             <h2 class="text-primary">@title</h2>
