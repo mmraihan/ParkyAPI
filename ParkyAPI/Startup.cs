@@ -152,7 +152,7 @@ namespace ParkyAPI
             //    options.RoutePrefix = "";
             //});
 
-
+           
             app.UseRouting();
             app.UseCors(x => x //--mechanism that uses additional extra http headers to tell browsers..
             .AllowAnyOrigin()
