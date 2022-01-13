@@ -42,10 +42,10 @@ namespace ParkyWeb.Controllers
                     Text = i.Name,
                     Value = i.Id.ToString()
 
-                }),
-              
-                
+                }),    
+                Trail = new Trail() //otherwise object reference will be null
             };
+      
 
            
             if (id==null)
