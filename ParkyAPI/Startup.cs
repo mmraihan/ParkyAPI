@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ParkyAPI
 {
@@ -55,8 +58,29 @@ namespace ParkyAPI
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen();
 
-            var appSettings = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettings);
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret); 
+
+            services.AddAuthentication(c =>
+            {
+                c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                c.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(c =>
+                {
+                    c.RequireHttpsMetadata = false;
+                    c.SaveToken = true;
+                    c.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false, //--Set to be true in production
+                        ValidateAudience = false  //--Set to be true in production
+                    };
+                });
 
             #region API Versioning Desctiption
             //services.AddSwaggerGen(options =>
@@ -130,6 +154,12 @@ namespace ParkyAPI
 
 
             app.UseRouting();
+            app.UseCors(x => x //--mechanism that uses additional extra http headers to tell browsers..
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
