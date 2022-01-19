@@ -46,10 +46,15 @@ namespace ParkyWeb
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
+            app.UseCors(x => x //--mechanism that uses additional extra http headers to tell browsers..
+           .AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader());
 
+            app.UseSession();
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
