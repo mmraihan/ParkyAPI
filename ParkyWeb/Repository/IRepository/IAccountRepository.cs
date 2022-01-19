@@ -10,5 +10,6 @@ namespace ParkyWeb.Repository.IRepository
     {
         Task<User> LoginAsync(string url, User objToCreate);
         Task<bool> RegisterAsync(string url, User objToCreate);
+
     }
 }
