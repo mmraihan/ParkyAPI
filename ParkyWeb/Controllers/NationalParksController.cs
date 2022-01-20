@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ParkyWeb.Models;
 using ParkyWeb.Repository.IRepository;
 using System;
@@ -25,7 +26,7 @@ namespace ParkyWeb.Controllers
 
         public async Task<IActionResult> GetAllNationalParks()
         {
-            return Json(new { data = await _np.GetAllAsync(SD.NationalParkApiPath) });
+            return Json(new { data = await _np.GetAllAsync(SD.NationalParkApiPath, HttpContext.Session.GetString("JWToken")) });
         }
 
         public async Task<IActionResult> Upsert(int? id)
@@ -36,7 +37,7 @@ namespace ParkyWeb.Controllers
                 return View(obj); // --True for Insert
             }
                
-            obj = await _np.GetAsync(SD.NationalParkApiPath, id.GetValueOrDefault()); //--Flow will come for Update
+            obj = await _np.GetAsync(SD.NationalParkApiPath, id.GetValueOrDefault(), HttpContext.Session.GetString("JWToken")); //--Flow will come for Update
             if (obj==null)
             {
                 return NotFound();
@@ -66,17 +67,17 @@ namespace ParkyWeb.Controllers
                 }
                 else //If image is not uploaded
                 {
-                    var objFromDb = await _np.GetAsync(SD.NationalParkApiPath, obj.Id);
+                    var objFromDb = await _np.GetAsync(SD.NationalParkApiPath, obj.Id, HttpContext.Session.GetString("JWToken"));
                     obj.Picture = objFromDb.Picture;
                 }
 
                 if (obj.Id==0)
                 {
-                    await _np.CreateAsync(SD.NationalParkApiPath, obj);
+                    await _np.CreateAsync(SD.NationalParkApiPath, obj, HttpContext.Session.GetString("JWToken"));
                 }
                 else
                 {
-                    await _np.UpdateAsync(SD.NationalParkApiPath + obj.Id, obj);
+                    await _np.UpdateAsync(SD.NationalParkApiPath + obj.Id, obj, HttpContext.Session.GetString("JWToken"));
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -92,7 +93,7 @@ namespace ParkyWeb.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var status = await _np.DeleteAsync(SD.NationalParkApiPath, id);
+            var status = await _np.DeleteAsync(SD.NationalParkApiPath, id, HttpContext.Session.GetString("JWToken"));
             if (status)
             {
                 return Json(new { success = true, message = "Successfully Deleted" });
