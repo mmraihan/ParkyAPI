@@ -40,10 +40,6 @@
                             </li>
                         }
 
-
-
-
-
                         @if (httpAcc.HttpContext.Session.GetString("JWToken") != null &&
                            httpAcc.HttpContext.Session.GetString("JWToken").ToString().Length > 0)
                         {
@@ -70,6 +66,16 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+
+            @if (TempData["alert"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["alert"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>
