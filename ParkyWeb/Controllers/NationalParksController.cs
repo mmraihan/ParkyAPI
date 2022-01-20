@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ParkyWeb.Models;
 using ParkyWeb.Repository.IRepository;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ParkyWeb.Controllers
 {
+    [Authorize]
     public class NationalParksController : Controller
     {
         private readonly INationalParkRepository _np;
@@ -29,6 +31,7 @@ namespace ParkyWeb.Controllers
             return Json(new { data = await _np.GetAllAsync(SD.NationalParkApiPath, HttpContext.Session.GetString("JWToken")) });
         }
 
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Upsert(int? id)
         {
             NationalPark obj = new NationalPark();
@@ -91,6 +94,7 @@ namespace ParkyWeb.Controllers
         }
             
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var status = await _np.DeleteAsync(SD.NationalParkApiPath, id, HttpContext.Session.GetString("JWToken"));
